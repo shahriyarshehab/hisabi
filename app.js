@@ -304,6 +304,13 @@ function setupNavigation() {
     });
   }
 
+  const btnHeaderLogin = document.getElementById("btn-header-login");
+  if (btnHeaderLogin && authModal) {
+    btnHeaderLogin.addEventListener("click", () => {
+      authModal.classList.add("active");
+    });
+  }
+
   // Mess Modal Switcher & Trigger
   const btnOpenMessModal = document.getElementById("btn-open-mess-modal");
   const btnCloseMessModal = document.getElementById("btn-close-mess-modal");
@@ -564,6 +571,11 @@ async function syncUserProfile(user) {
   if (headerUserName) headerUserName.textContent = displayName;
   if (headerAvatar) headerAvatar.textContent = getInitials(displayName);
 
+  const btnHeaderLogin = document.getElementById("btn-header-login");
+  const btnLogout = document.getElementById("btn-logout");
+  if (btnHeaderLogin) btnHeaderLogin.style.display = "none";
+  if (btnLogout) btnLogout.style.display = "inline-flex";
+
   currentRole = localStorage.getItem("hisabi_current_role") || "member";
   currentStatus = localStorage.getItem("hisabi_current_status") || "none";
   currentMess = null;
@@ -662,7 +674,7 @@ async function syncUserProfile(user) {
    Firebase Authentication State Observer
    ========================================================================== */
 function activateDemoMode() {
-  localStorage.setItem("hisabi_demo_active", "true");
+  sessionStorage.setItem("hisabi_demo_active", "true");
   localStorage.removeItem("hisabi_explicit_logout");
 
   currentUser = {
@@ -686,14 +698,18 @@ function activateDemoMode() {
   const headerUserRole = document.getElementById("header-user-role");
   const headerAvatar = document.getElementById("header-avatar");
   const headerMessName = document.getElementById("header-mess-name");
+  const btnHeaderLogin = document.getElementById("btn-header-login");
+  const btnLogout = document.getElementById("btn-logout");
 
   if (headerUserName) headerUserName.textContent = "Tanvir Fahim";
   if (headerUserRole) {
-    headerUserRole.textContent = "Owner";
+    headerUserRole.textContent = "Owner (Demo)";
     headerUserRole.className = "badge badge-owner";
   }
   if (headerAvatar) headerAvatar.textContent = "TF";
   if (headerMessName) headerMessName.textContent = currentMess.name;
+  if (btnHeaderLogin) btnHeaderLogin.style.display = "inline-flex";
+  if (btnLogout) btnLogout.style.display = "inline-flex";
 
   const authModal = document.getElementById("section-auth");
   if (authModal) authModal.classList.remove("active");
@@ -706,51 +722,54 @@ function activateDemoMode() {
    ========================================================================== */
 function setupAuthObserver() {
   const authModal = document.getElementById("section-auth");
+  const btnHeaderLogin = document.getElementById("btn-header-login");
+  const btnLogout = document.getElementById("btn-logout");
 
   if (!auth) {
-    activateDemoMode();
+    currentUser = null;
+    currentRole = "guest";
+    currentMess = null;
+    loadAllMessData();
+    if (btnHeaderLogin) btnHeaderLogin.style.display = "inline-flex";
+    if (btnLogout) btnLogout.style.display = "none";
+    if (authModal) authModal.classList.add("active");
     return;
   }
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
       console.log("User signed in:", user.uid);
+      sessionStorage.removeItem("hisabi_demo_active");
       localStorage.removeItem("hisabi_demo_active");
       localStorage.removeItem("hisabi_explicit_logout");
+      if (btnHeaderLogin) btnHeaderLogin.style.display = "none";
+      if (btnLogout) btnLogout.style.display = "inline-flex";
       await syncUserProfile(user);
       if (authModal) authModal.classList.remove("active");
     } else {
-      // User is not signed in to Firebase Auth.
-      // Check if user has explicitly logged out
-      const isExplicitLogout = localStorage.getItem("hisabi_explicit_logout") === "true";
+      // User is not signed in to Firebase Auth: Always show the login modal by default
+      currentUser = null;
+      currentRole = "guest";
+      currentMess = null;
 
-      if (!isExplicitLogout) {
-        // Normal visit or page reload: DO NOT block user with the login modal!
-        // Automatically activate demo owner mode so user can immediately use and develop SMPAZ8
-        activateDemoMode();
-        if (authModal) authModal.classList.remove("active");
-      } else {
-        // Only show login page if user explicitly clicked Sign Out
-        currentUser = null;
-        currentRole = "guest";
-        currentMess = null;
+      const headerUserName = document.getElementById("header-user-name");
+      const headerUserRole = document.getElementById("header-user-role");
+      const headerAvatar = document.getElementById("header-avatar");
+      const headerMessName = document.getElementById("header-mess-name");
 
-        const headerUserName = document.getElementById("header-user-name");
-        const headerUserRole = document.getElementById("header-user-role");
-        const headerAvatar = document.getElementById("header-avatar");
-        const headerMessName = document.getElementById("header-mess-name");
-
-        if (headerUserName) headerUserName.textContent = "Guest User";
-        if (headerUserRole) {
-          headerUserRole.textContent = "Not Signed In";
-          headerUserRole.className = "badge badge-neutral";
-        }
-        if (headerAvatar) headerAvatar.textContent = "??";
-        if (headerMessName) headerMessName.textContent = "Smart Mess System";
-
-        await loadAllMessData();
-        if (authModal) authModal.classList.add("active");
+      if (headerUserName) headerUserName.textContent = "Guest User";
+      if (headerUserRole) {
+        headerUserRole.textContent = "Sign In";
+        headerUserRole.className = "badge badge-neutral";
       }
+      if (headerAvatar) headerAvatar.textContent = "🔑";
+      if (headerMessName) headerMessName.textContent = "Smart Mess System";
+
+      if (btnHeaderLogin) btnHeaderLogin.style.display = "inline-flex";
+      if (btnLogout) btnLogout.style.display = "none";
+
+      await loadAllMessData();
+      if (authModal) authModal.classList.add("active");
     }
   });
 }
@@ -3116,14 +3135,17 @@ function setupSignOut() {
       const headerUserRole = document.getElementById("header-user-role");
       const headerAvatar = document.getElementById("header-avatar");
       const headerMessName = document.getElementById("header-mess-name");
+      const btnHeaderLogin = document.getElementById("btn-header-login");
 
       if (headerUserName) headerUserName.textContent = "Guest User";
       if (headerUserRole) {
-        headerUserRole.textContent = "Not Signed In";
+        headerUserRole.textContent = "Sign In";
         headerUserRole.className = "badge badge-neutral";
       }
-      if (headerAvatar) headerAvatar.textContent = "??";
+      if (headerAvatar) headerAvatar.textContent = "🔑";
       if (headerMessName) headerMessName.textContent = "Smart Mess System";
+      if (btnHeaderLogin) btnHeaderLogin.style.display = "inline-flex";
+      btnLogout.style.display = "none";
 
       await loadAllMessData();
       if (authModal) authModal.classList.add("active");

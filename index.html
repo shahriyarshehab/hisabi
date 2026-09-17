@@ -35,14 +35,17 @@
         </svg>
         Mess
       </button>
-      <div class="user-pill" id="user-profile-pill">
-        <div class="user-avatar" id="header-avatar">TF</div>
+      <div class="user-pill" id="user-profile-pill" style="cursor:pointer;" title="Click to Sign In or manage account">
+        <div class="user-avatar" id="header-avatar">🔑</div>
         <div class="user-meta">
-          <span class="user-name" id="header-user-name">Tanvir Fahim</span>
-          <span class="badge badge-owner" id="header-user-role">Owner</span>
+          <span class="user-name" id="header-user-name">Guest User</span>
+          <span class="badge badge-neutral" id="header-user-role">Sign In</span>
         </div>
       </div>
-      <button class="btn-icon" id="btn-logout" title="Sign Out" aria-label="Sign Out">
+      <button class="btn btn-xs btn-primary" id="btn-header-login" title="Sign In" style="display:inline-flex; font-size:11.5px; padding:5px 10px; font-weight:700; white-space:nowrap;">
+        🔑 Sign In
+      </button>
+      <button class="btn-icon" id="btn-logout" title="Sign Out" aria-label="Sign Out" style="display:none;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
           <polyline points="16 17 21 12 16 7"></polyline>
@@ -936,8 +939,8 @@
       </div>
     </section>
 
-    <!-- SECTION: CREATE OR JOIN MESS MODAL -->
-    <section id="section-mess-modal" class="app-section auth-modal-screen">
+    <!-- MODAL: CREATE OR JOIN MESS MODAL -->
+    <div id="section-mess-modal" class="auth-modal-screen">
       <div class="auth-card">
         <div class="auth-header">
           <div class="auth-icon-badge">
@@ -1036,10 +1039,10 @@
           <button type="button" class="btn-link" id="btn-close-mess-modal">Close</button>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- SECTION 5: AUTH VIEW (Phase 2 Firebase Authentication) -->
-    <section id="section-auth" class="app-section auth-modal-screen">
+    <!-- MODAL: AUTH VIEW (Firebase Authentication) -->
+    <div id="section-auth" class="auth-modal-screen active">
       <div class="auth-card">
         <button type="button" class="btn-icon" id="btn-close-auth-x" title="Close" aria-label="Close" style="position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%; border:1px solid var(--surface-border); background:var(--surface-bg); font-size:18px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-secondary);">&times;</button>
         <div class="auth-header">
@@ -1172,7 +1175,7 @@
           <button class="btn-link" id="btn-config-key">Firebase API Key Settings</button>
         </div>
       </div>
-    </section>
+    </div>
 
   </main>
 
