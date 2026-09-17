@@ -1,0 +1,49 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Messes Collection
+    match /messes/{messId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Join Requests Collection
+    match /join_requests/{requestId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read, create, update: if isAuthenticated();
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Deposits Collection
+    match /deposits/{depositId} {
+      allow read, create, update, delete: if isAuthenticated();
+    }
+
+    // Expenses Collection
+    match /expenses/{expenseId} {
+      allow read, create, update, delete: if isAuthenticated();
+    }
+
+    // Meals Collection
+    match /meals/{mealId} {
+      allow read, create, update, delete: if isAuthenticated();
+    }
+
+    // Bazar Schedule Collection
+    match /bazar_schedule/{scheduleId} {
+      allow read, create, update, delete: if isAuthenticated();
+    }
+  }
+}

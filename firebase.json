@@ -1,0 +1,12 @@
+{
+  "auth": {
+    "authorizedDomains": [
+      "localhost",
+      "smart-mess-management-app.firebaseapp.com",
+      "smart-mess-management-app.web.app"
+    ],
+    "providers": {
+      "emailPassword": true
+    }
+  }
+}

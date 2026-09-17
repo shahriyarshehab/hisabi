@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Smart Mess Management | Hisabi</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Fixed Top Header -->
+  <header class="top-header">
+    <div class="header-left">
+      <div class="brand-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">Hisabi</h1>
+        <span class="brand-subtitle" id="header-mess-name">Smart Mess System</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button class="btn btn-xs btn-primary" id="btn-open-mess-modal" title="Create or Join a Mess" style="font-size:11px; padding:5px 9px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        Mess
+      </button>
+      <div class="user-pill" id="user-profile-pill">
+        <div class="user-avatar" id="header-avatar">TF</div>
+        <div class="user-meta">
+          <span class="user-name" id="header-user-name">Tanvir Fahim</span>
+          <span class="badge badge-owner" id="header-user-role">Owner</span>
+        </div>
+      </div>
+      <button class="btn-icon" id="btn-logout" title="Sign Out" aria-label="Sign Out">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Scrollable App Container -->
+  <main class="app-main">
+
+    <!-- ALERT BANNER: Next Day Bazar Duty Notification -->
+    <section class="alert-banner warning-banner" id="duty-alert">
+      <div class="alert-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+      </div>
+      <div class="alert-content">
+        <h4 class="alert-title">Your Turn for Bazar Duty Tomorrow!</h4>
+        <p class="alert-desc">You are scheduled for morning grocery shopping on <strong>Tomorrow, Oct 15</strong>. Please check budget & meal requirements.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 1: DASHBOARD -->
+    <section id="section-dashboard" class="app-section active">
+      <!-- Balance & Financial Overview Cards -->
+      <div class="financial-overview-grid">
+        <!-- Main Highlight Card: Current Balance -->
+        <div class="card stat-card card-highlight">
+          <div class="stat-card-header">
+            <span class="stat-label">Current Balance</span>
+            <span class="stat-icon-wrapper success">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+            </span>
+          </div>
+          <div class="stat-main-val text-success" id="stat-current-balance">৳ 0.00</div>
+          <div class="stat-footer">
+            <span class="trend-badge positive" id="stat-balance-trend">Available in hand</span>
+            <span class="stat-subtext">Total Deposits - Expense</span>
+          </div>
+        </div>
+
+        <!-- Current Meal Rate -->
+        <div class="card stat-card">
+          <div class="stat-card-header">
+            <span class="stat-label">Current Meal Rate</span>
+            <span class="stat-icon-wrapper primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 6v6l4 2"></path>
+              </svg>
+            </span>
+          </div>
+          <div class="stat-main-val" id="stat-meal-rate">৳ 0.00</div>
+          <div class="stat-footer">
+            <span class="stat-subtext" id="stat-meal-rate-sub">Total Bazar / Total Meals</span>
+          </div>
+        </div>
+
+        <!-- Personal Expense -->
+        <div class="card stat-card">
+          <div class="stat-card-header">
+            <span class="stat-label">Personal Expense</span>
+            <span class="stat-icon-wrapper danger">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </span>
+          </div>
+          <div class="stat-main-val text-danger" id="stat-personal-expense">৳ 0.00</div>
+          <div class="stat-footer">
+            <span class="stat-subtext" id="stat-personal-expense-sub">Meals: ৳0 + Fixed: ৳0</span>
+          </div>
+        </div>
+
+        <!-- Total Deposits -->
+        <div class="card stat-card">
+          <div class="stat-card-header">
+            <span class="stat-label">Total Deposits</span>
+            <span class="stat-icon-wrapper info">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
+              </svg>
+            </span>
+          </div>
+          <div class="stat-main-val" id="stat-total-deposits">৳ 0.00</div>
+          <div class="stat-footer">
+            <span class="stat-subtext" id="stat-total-deposits-sub">0 deposits recorded</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action: Tomorrow's Meal Card Summary -->
+      <div class="card meal-quick-card">
+        <div class="card-header-flex">
+          <div>
+            <h3 class="card-title">Tomorrow's Meal Status</h3>
+            <p class="card-subtitle" id="dash-tomorrow-date">Loading date &bull; Cut-off at 11:00 PM</p>
+          </div>
+          <span class="badge badge-success" id="dash-cutoff-badge">Open until 11:00 PM</span>
+        </div>
+
+        <div class="quick-toggle-row">
+          <div class="meal-mini-pill" id="dash-pill-breakfast">
+            <span class="meal-name">Breakfast</span>
+            <span class="meal-state" id="dash-state-breakfast">--</span>
+          </div>
+          <div class="meal-mini-pill" id="dash-pill-lunch">
+            <span class="meal-name">Lunch</span>
+            <span class="meal-state" id="dash-state-lunch">--</span>
+          </div>
+          <div class="meal-mini-pill" id="dash-pill-dinner">
+            <span class="meal-name">Dinner</span>
+            <span class="meal-state" id="dash-state-dinner">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Bazar Duty Schedule (2-3 Days) -->
+      <div class="card roster-card">
+        <div class="card-header-flex">
+          <div>
+            <h3 class="card-title">Upcoming Bazar Roster</h3>
+            <p class="card-subtitle">Duty schedule for upcoming days</p>
+          </div>
+          <span class="badge badge-neutral">Next 3 Days</span>
+        </div>
+
+        <div class="roster-list" id="dash-roster-list">
+          <div class="roster-item">
+            <div class="roster-info">
+              <span class="roster-meta">Loading upcoming duty turns...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: DEDICATED MESS OWNER DASHBOARD & HUB -->
+    <section id="section-mess-dashboard" class="app-section">
+      <!-- Mess Hero Header Card -->
+      <div class="mess-hero-card">
+        <div class="mess-hero-top">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <span class="badge badge-warning" id="hub-user-role-badge">👑 Mess Owner</span>
+              <span class="badge badge-neutral" style="background:rgba(255,255,255,0.2); color:#FFFFFF; border:none;" id="hub-status-badge">Active</span>
+            </div>
+            <h2 class="mess-hero-title" id="hub-mess-name">Green View Bachelor Mess</h2>
+            <div class="mess-hero-meta">
+              <span id="hub-mess-area">📍 Dhanmondi, Dhaka</span>
+              &bull;
+              <span id="hub-mess-created">Established Oct 2026</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-xs" id="btn-hub-open-modal" style="background:rgba(255,255,255,0.2); color:#FFFFFF; border:1px solid rgba(255,255,255,0.3); white-space:nowrap; padding:6px 10px; font-size:11.5px;">
+            🔄 Switch / Add
+          </button>
+        </div>
+
+        <!-- Mess Invite Code Container -->
+        <div class="mess-hero-invite-box">
+          <div>
+            <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:#C7D2FE; display:block;">Roommate Invite Code</span>
+            <span class="mess-invite-code-txt" id="hub-invite-code">SMPAZ8</span>
+          </div>
+          <div class="mess-hero-actions">
+            <button type="button" class="btn btn-xs btn-secondary" id="btn-hub-copy-code" style="padding:6px 12px; font-size:11.5px;">
+              📋 Copy
+            </button>
+            <button type="button" class="btn btn-xs btn-primary" id="btn-hub-share-wa" style="padding:6px 12px; font-size:11.5px; background:#25D366; border-color:#25D366;">
+              💬 Share
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Mess Overview Stats Grid -->
+      <div class="mess-stats-grid">
+        <div class="mess-stat-box">
+          <div class="mess-stat-box-label">
+            <span>Roommates</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          </div>
+          <div class="mess-stat-box-val" id="hub-stat-members">4 Active</div>
+          <div class="mess-stat-box-sub" id="hub-stat-fixed-sub">Fixed: ৳800/roommate</div>
+        </div>
+
+        <div class="mess-stat-box">
+          <div class="mess-stat-box-label">
+            <span>Total Mess Meals</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path></svg>
+          </div>
+          <div class="mess-stat-box-val" id="hub-stat-meals">0.0 Meals</div>
+          <div class="mess-stat-box-sub">This Month</div>
+        </div>
+
+        <div class="mess-stat-box">
+          <div class="mess-stat-box-label">
+            <span>Total Grocery Bazar</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          </div>
+          <div class="mess-stat-box-val" id="hub-stat-bazar">৳ 0.00</div>
+          <div class="mess-stat-box-sub" id="hub-stat-bazar-sub">Grocery Bazar</div>
+        </div>
+
+        <div class="mess-stat-box">
+          <div class="mess-stat-box-label">
+            <span>Current Meal Rate</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+          </div>
+          <div class="mess-stat-box-val text-primary" id="hub-stat-rate">৳ 0.00</div>
+          <div class="mess-stat-box-sub">Bazar ÷ Total Meals</div>
+        </div>
+      </div>
+
+      <!-- Segmented Navigation Tabs Inside Mess Hub -->
+      <div class="mess-tabs-nav">
+        <button type="button" class="mess-tab-btn active" id="tab-btn-hub-meals" data-hub-target="pane-hub-meals">
+          📊 Meal Chart
+        </button>
+        <button type="button" class="mess-tab-btn" id="tab-btn-hub-bazar" data-hub-target="pane-hub-bazar">
+          🛒 Bazar
+        </button>
+        <button type="button" class="mess-tab-btn" id="tab-btn-hub-members" data-hub-target="pane-hub-members">
+          👥 Members & Ledger
+        </button>
+        <button type="button" class="mess-tab-btn" id="tab-btn-hub-settings" data-hub-target="pane-hub-settings">
+          ⚙️ Owner Settings
+        </button>
+      </div>
+
+      <!-- PANE 1: Monthly Meal Chart & Breakdown -->
+      <div class="mess-tab-pane active" id="pane-hub-meals">
+        <!-- Meal Type Breakdown Pills -->
+        <div class="meal-summary-pills">
+          <div class="meal-sum-pill">
+            <span class="count text-warning" id="hub-meals-breakfast-count">0</span>
+            <span class="label">🌅 Breakfasts</span>
+          </div>
+          <div class="meal-sum-pill">
+            <span class="count text-primary" id="hub-meals-lunch-count">0</span>
+            <span class="label">☀️ Lunches</span>
+          </div>
+          <div class="meal-sum-pill">
+            <span class="count text-secondary" id="hub-meals-dinner-count">0</span>
+            <span class="label">🌙 Dinners</span>
+          </div>
+        </div>
+
+        <!-- Member Meal Contribution Progress Bars -->
+        <div class="card">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title">Roommate Meal Consumption Chart</h3>
+              <p class="card-subtitle">Monthly meal share & ratio across all roommates</p>
+            </div>
+            <span class="badge badge-primary">Monthly Breakdown</span>
+          </div>
+          <div id="hub-member-meal-bars" style="margin-top:14px;">
+            <div style="text-align:center; padding:16px; color:var(--text-muted); font-size:12.5px;">
+              Loading meal distribution chart...
+            </div>
+          </div>
+          <div style="display:flex; justify-content:center; gap:14px; margin-top:12px; font-size:11.5px; color:var(--text-muted);">
+            <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px; height:8px; border-radius:50%; background:#F59E0B;"></span> Breakfast</span>
+            <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px; height:8px; border-radius:50%; background:#4F46E5;"></span> Lunch</span>
+            <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px; height:8px; border-radius:50%; background:#10B981;"></span> Dinner</span>
+          </div>
+        </div>
+
+        <!-- Daily Mess Meal Matrix Table -->
+        <div class="card" style="margin-top:14px;">
+          <h3 class="card-title">Daily Mess Meal Count History</h3>
+          <p class="card-subtitle">Aggregated meals cooked each day for all members</p>
+          <div class="table-responsive" style="margin-top:10px;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Breakfast</th>
+                  <th>Lunch</th>
+                  <th>Dinner</th>
+                  <th>Day Total</th>
+                </tr>
+              </thead>
+              <tbody id="hub-daily-meal-matrix">
+                <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Loading meal logs...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANE 2: Bazar Management -->
+      <div class="mess-tab-pane" id="pane-hub-bazar">
+        <div class="card">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title">Upcoming Bazar Schedule & Turns</h3>
+              <p class="card-subtitle">Roommates assigned for morning grocery shopping</p>
+            </div>
+            <button type="button" class="btn btn-xs btn-primary" id="btn-toggle-assign-bazar">
+              + Assign Turn
+            </button>
+          </div>
+
+          <!-- Collapsible Assign Duty Form -->
+          <form id="form-assign-bazar" class="app-form" style="display:none; background:var(--bg-app); border:1px solid var(--surface-border); border-radius:var(--radius-md); padding:14px; margin: 12px 0;" onsubmit="event.preventDefault();">
+            <h4 style="font-size:13px; font-weight:700; margin-bottom:8px;">Schedule a Bazar Duty Turn</h4>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="assign-bazar-member">Assign To</label>
+                <select id="assign-bazar-member" class="form-select"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="assign-bazar-date">Date</label>
+                <input type="date" id="assign-bazar-date" class="form-input">
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="assign-bazar-budget">Budget (৳)</label>
+                <input type="number" id="assign-bazar-budget" class="form-input" value="1500" placeholder="1500">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="assign-bazar-note">Note</label>
+                <input type="text" id="assign-bazar-note" class="form-input" placeholder="e.g. Chicken & Vegetables">
+              </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button type="submit" class="btn btn-primary btn-block" id="btn-save-bazar-turn">Confirm Duty</button>
+              <button type="button" class="btn btn-secondary" id="btn-cancel-assign-bazar">Cancel</button>
+            </div>
+          </form>
+
+          <div class="roster-calendar-list" id="hub-bazar-schedule-list" style="margin-top:12px;">
+            <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:12.5px;">Loading bazar duties...</div>
+          </div>
+        </div>
+
+        <!-- Recent Grocery Bazar Expenses -->
+        <div class="card" style="margin-top:14px;">
+          <h3 class="card-title">Recent Bazar Purchases & Receipts</h3>
+          <p class="card-subtitle">Grocery expenses added to the mess</p>
+          <div id="hub-bazar-expenses-list" style="margin-top:12px;">
+            <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:12.5px;">Loading purchases...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANE 3: Roommates & Financial Ledger -->
+      <div class="mess-tab-pane" id="pane-hub-members">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+          <div>
+            <h3 class="card-title" style="margin:0;">Roommate Financial Ledger</h3>
+            <p class="card-subtitle" style="margin:0;">Individual balances calculated as (Meals × Rate) + Fixed - Deposits</p>
+          </div>
+          <span class="badge badge-primary" id="hub-members-count-badge">4 Roommates</span>
+        </div>
+
+        <div id="hub-members-ledger-list">
+          <div style="text-align:center; padding:16px; color:var(--text-muted); font-size:12.5px;">
+            Loading roommate accounts...
+          </div>
+        </div>
+      </div>
+
+      <!-- PANE 4: Owner Settings & Actions -->
+      <div class="mess-tab-pane" id="pane-hub-settings">
+        <!-- Pending Member Join Requests -->
+        <div class="card" id="hub-card-join-requests">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title">Pending Member Join Requests</h3>
+              <p class="card-subtitle">Approve or reject roommates requesting to join your mess</p>
+            </div>
+            <span class="badge badge-warning" id="hub-badge-pending-count">0 Pending</span>
+          </div>
+          <div class="request-list" id="hub-join-requests-list" style="margin-top:12px;">
+            <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:12.5px;">
+              No pending join requests at this time.
+            </div>
+          </div>
+        </div>
+
+        <!-- Mess Settings Form -->
+        <div class="card" style="margin-top:14px;">
+          <h3 class="card-title">Mess Information & Settings</h3>
+          <p class="card-subtitle">Update your mess name, fixed monthly cost share, and area</p>
+          <form id="form-edit-mess-settings" class="app-form" style="margin-top:12px;" onsubmit="event.preventDefault();">
+            <div class="form-group">
+              <label class="form-label" for="edit-mess-name">Mess Name</label>
+              <input type="text" id="edit-mess-name" class="form-input" required>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="edit-mess-fixed">Fixed Cost Share (৳)</label>
+                <input type="number" id="edit-mess-fixed" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="edit-mess-area">Location / Area</label>
+                <input type="text" id="edit-mess-area" class="form-input">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="btn-save-mess-settings">
+              💾 Save Mess Settings
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: MEAL CONTROL SYSTEM -->
+    <section id="section-meals" class="app-section">
+      <div class="section-title-wrap">
+        <h2 class="section-heading">Meal Control System</h2>
+        <p class="section-subtext">Toggle your meals for the upcoming day before the cut-off.</p>
+      </div>
+
+      <!-- Cut-off Notice Banner -->
+      <div class="cutoff-notice-card">
+        <div class="cutoff-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div class="cutoff-details">
+          <div class="cutoff-header-line">
+            <span class="cutoff-title">Nightly Cut-off Rule</span>
+            <span class="badge badge-cutoff" id="cutoff-status-badge">Open until 11:00 PM</span>
+          </div>
+          <p class="cutoff-explanation">
+            Toggles automatically freeze at <strong>11:00 PM every night</strong> so managers and the cook can finalize grocery quantities.
+          </p>
+        </div>
+      </div>
+
+      <!-- Multi-Day Switcher Tabs -->
+      <div class="meal-day-tabs" id="meal-day-tabs">
+        <button type="button" class="meal-day-btn active" data-meal-day="tomorrow" id="meal-day-btn-tomorrow">
+          📅 Tomorrow (আগামীকাল)
+        </button>
+        <button type="button" class="meal-day-btn" data-meal-day="today" id="meal-day-btn-today">
+          📅 Today (আজ)
+        </button>
+        <button type="button" class="meal-day-btn" data-meal-day="day2" id="meal-day-btn-day2">
+          📅 Day After (পরশু)
+        </button>
+        <button type="button" class="meal-day-btn" data-meal-day="day3" id="meal-day-btn-day3">
+          📅 In 3 Days
+        </button>
+      </div>
+
+      <!-- Meal Toggle Form -->
+      <div class="card meal-toggle-box">
+        <div class="meal-toggle-header">
+          <div>
+            <h3 class="card-title">My Meal Preferences</h3>
+            <span class="target-date-display" id="meal-target-date">Tomorrow: Wednesday, 15 Oct 2026</span>
+          </div>
+          <span class="badge badge-primary" id="meal-selected-day-badge">Tomorrow</span>
+        </div>
+
+        <!-- Quick Bulk Action Buttons -->
+        <div class="meal-bulk-bar">
+          <button type="button" class="meal-quick-btn danger-light" id="btn-meals-all-off">
+            🔴 All OFF (সব মিল বন্ধ)
+          </button>
+          <button type="button" class="meal-quick-btn success-light" id="btn-meals-all-on">
+            🟢 All ON (সব মিল চালু)
+          </button>
+          <button type="button" class="meal-quick-btn primary-light" id="btn-meals-lunch-dinner">
+            ☀️ Lunch + Dinner (দুপুর ও রাত)
+          </button>
+        </div>
+
+        <div class="toggle-list">
+          <!-- Breakfast -->
+          <div class="toggle-row">
+            <div class="meal-desc">
+              <div class="meal-icon-avatar breakfast">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                  <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                  <line x1="6" y1="1" x2="6" y2="4"></line>
+                  <line x1="10" y1="1" x2="10" y2="4"></line>
+                  <line x1="14" y1="1" x2="14" y2="4"></line>
+                </svg>
+              </div>
+              <div class="meal-text">
+                <div style="display:flex; align-items:center;">
+                  <span class="meal-title">Breakfast (সকালের নাস্তা)</span>
+                  <span class="meal-live-badge on" id="badge-toggle-breakfast">ON</span>
+                </div>
+                <span class="meal-timing">08:00 AM - 09:30 AM &bull; Paratha / Dim / Khichuri</span>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-breakfast" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- Lunch -->
+          <div class="toggle-row">
+            <div class="meal-desc">
+              <div class="meal-icon-avatar lunch">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M8 12h8"></path>
+                  <path d="M12 8v8"></path>
+                </svg>
+              </div>
+              <div class="meal-text">
+                <div style="display:flex; align-items:center;">
+                  <span class="meal-title">Lunch (দুপুরের খাবার)</span>
+                  <span class="meal-live-badge on" id="badge-toggle-lunch">ON</span>
+                </div>
+                <span class="meal-timing">01:30 PM - 03:00 PM &bull; Rice, Chicken/Fish, Daal</span>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-lunch" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- Dinner -->
+          <div class="toggle-row">
+            <div class="meal-desc">
+              <div class="meal-icon-avatar dinner">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+              </div>
+              <div class="meal-text">
+                <div style="display:flex; align-items:center;">
+                  <span class="meal-title">Dinner (রাতের খাবার)</span>
+                  <span class="meal-live-badge off" id="badge-toggle-dinner">OFF</span>
+                </div>
+                <span class="meal-timing">09:00 PM - 10:30 PM &bull; Rice, Vegetable/Egg curry</span>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-dinner">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="toggle-action-bar">
+          <button class="btn btn-primary btn-block" id="btn-save-meals">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Save Meal Preferences
+          </button>
+        </div>
+      </div>
+
+      <!-- Roommate Meal ON/OFF Board -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-header-flex">
+          <div>
+            <h3 class="card-title">Roommates Meal ON / OFF Board</h3>
+            <p class="card-subtitle">Click any meal chip [ON/OFF] to toggle meal for any roommate</p>
+          </div>
+          <span class="badge badge-warning" id="roommate-board-date-badge">Tomorrow</span>
+        </div>
+
+        <!-- Khala Cook Headcount Live Banner -->
+        <div class="cook-summary-card" style="margin-top:12px;">
+          <div class="cook-summary-header">
+            <div class="cook-summary-title">
+              👩‍🍳 Khala's Live Headcount (<span id="cook-summary-date-txt">Tomorrow</span>)
+            </div>
+            <button type="button" class="btn btn-xs btn-secondary" id="btn-share-cook-count" style="font-size:11px; padding:4px 9px;">
+              📋 Copy for Khala / WhatsApp
+            </button>
+          </div>
+          <div class="cook-summary-chips">
+            <div class="cook-chip-stat">
+              <div class="cook-chip-val text-warning" id="cook-count-breakfast">0</div>
+              <div class="cook-chip-lbl">🌅 Breakfast</div>
+            </div>
+            <div class="cook-chip-stat">
+              <div class="cook-chip-val text-primary" id="cook-count-lunch">0</div>
+              <div class="cook-chip-lbl">☀️ Lunch</div>
+            </div>
+            <div class="cook-chip-stat">
+              <div class="cook-chip-val text-secondary" id="cook-count-dinner">0</div>
+              <div class="cook-chip-lbl">🌙 Dinner</div>
+            </div>
+          </div>
+          <div style="font-size:11.5px; color:#92400E; margin-top:8px; text-align:center; font-weight:600;">
+            Total Meals Cooked: <strong id="cook-count-total">0</strong> Meals &bull; Mess Code: <strong>SMPAZ8</strong>
+          </div>
+        </div>
+
+        <!-- Roommate List with Interactive Chips -->
+        <div id="roommate-meal-chips-list" style="margin-top:10px;">
+          <div style="text-align:center; padding:16px; color:var(--text-muted); font-size:12.5px;">
+            Loading roommate meal board...
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Meal History Log (Dummy for UI preview) -->
+      <div class="card history-card">
+        <h3 class="card-title">Past 7 Days History</h3>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Breakfast</th>
+                <th>Lunch</th>
+                <th>Dinner</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="meal-history-tbody">
+              <tr>
+                <td colspan="5" style="text-align:center; color:var(--text-muted);">Loading meal history...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: BAZAR ROSTER FULL VIEW -->
+    <section id="section-bazar" class="app-section">
+      <div class="section-title-wrap">
+        <h2 class="section-heading">Bazar Schedule & Roster</h2>
+        <p class="section-subtext">Manage and view mess shopping turns and duty rotations.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header-flex">
+          <h3 class="card-title">Full Duty Roster</h3>
+          <span class="badge badge-primary" id="bazar-month-badge">Schedule</span>
+        </div>
+
+        <div class="roster-calendar-list" id="bazar-schedule-list">
+          <div class="roster-row-full">
+            <div class="duty-member-col">Loading duty schedule...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: MANAGER PANEL (Only visible to Admin / Manager) -->
+    <section id="section-manager" class="app-section">
+      <div class="section-title-wrap">
+        <div class="badge-role-lead">
+          <span class="badge badge-manager">Manager Access Only</span>
+        </div>
+        <h2 class="section-heading">Manager Operations Panel</h2>
+        <p class="section-subtext">Record grocery expenses, member deposits, and dispatch AI cooking instructions.</p>
+      </div>
+
+      <!-- Feature: AI Smart Messaging to Khala (Cook) -->
+      <div class="card ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon-pulse">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            </svg>
+          </div>
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <h3 class="card-title ai-glow-title">AI Cook Messaging (Gemini 1.5 Flash)</h3>
+              <button type="button" class="btn-link" id="btn-config-gemini" style="font-size:11.5px; padding:2px 6px;">Gemini API Key</button>
+            </div>
+            <p class="card-subtitle">Generates polite, concise Bengali cooking instructions for Khala.</p>
+          </div>
+        </div>
+
+        <div class="ai-stats-pill-row">
+          <div class="pill-stat">
+            <span class="p-title">Tomorrow's Active Lunch</span>
+            <span class="p-count text-primary" id="ai-count-lunch">8 Meals</span>
+          </div>
+          <div class="pill-stat">
+            <span class="p-title">Tomorrow's Active Dinner</span>
+            <span class="p-count text-secondary" id="ai-count-dinner">7 Meals</span>
+          </div>
+        </div>
+
+        <form class="ai-input-form" id="form-ai-message" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label class="form-label" for="menu-input">Daily Menu for Tomorrow</label>
+            <input 
+              type="text" 
+              id="menu-input" 
+              class="form-input" 
+              placeholder="e.g. দুপুরে মুরগির মাংস ও পাতলা ডাল, রাতে ডিম ভাজি ও সবজি" 
+              value="দুপুরে মুরগির মাংস ও পাতলা ডাল, রাতে ডিম ভাজি ও সবজি"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cook-phone">Cook's Phone / WhatsApp Number</label>
+            <input 
+              type="tel" 
+              id="cook-phone" 
+              class="form-input" 
+              placeholder="+8801700000000" 
+              value="+8801712345678"
+            >
+          </div>
+
+          <button class="btn btn-ai btn-block" id="btn-generate-ai">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            Generate AI Message for Khala
+          </button>
+        </form>
+
+        <!-- AI Output Box Preview -->
+        <div class="ai-output-box" id="ai-result-box">
+          <div class="ai-box-header">
+            <span class="ai-box-tag">Generated Bengali Instruction</span>
+            <span class="badge badge-sm badge-success">Ready</span>
+          </div>
+          <p class="ai-message-text" id="ai-preview-text">
+            খালা আসসালামু আলাইকুম। কালকে দুপুরে ৮ জনের জন্য মুরগির মাংস ও পাতলা ডাল রান্না করবেন। আর রাতে ৭ জনের জন্য ডিম ভাজি ও সবজি করবেন। সময়মতো চলে আসবেন দয়া করে। ধন্যবাদ!
+          </p>
+          <div class="ai-actions-row">
+            <a href="https://wa.me/8801712345678" target="_blank" class="btn btn-whatsapp" id="btn-send-whatsapp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              Open in WhatsApp
+            </a>
+            <a href="sms:+8801712345678" class="btn btn-sms" id="btn-send-sms">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              Send SMS
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Record Daily Grocery Expense Form -->
+      <div class="card form-card">
+        <h3 class="card-title">Record Daily Grocery / Bazar Expense</h3>
+        <p class="card-subtitle">Adds to total mess expenses for meal rate calculation.</p>
+
+        <form id="form-expense" class="app-form" onsubmit="event.preventDefault();">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="expense-amount">Amount (৳)</label>
+              <input type="number" id="expense-amount" class="form-input" placeholder="e.g. 1450" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="expense-date">Date</label>
+              <input type="date" id="expense-date" class="form-input" value="2026-10-14">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expense-type">Expense Category</label>
+            <select id="expense-type" class="form-select">
+              <option value="daily">Daily Grocery / Bazar (Affects Meal Rate)</option>
+              <option value="fixed">Fixed Utility / Rent / WiFi / Cook's Salary</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expense-desc">Description / Item Details</label>
+            <input type="text" id="expense-desc" class="form-input" placeholder="e.g. 2kg Chicken, 1kg Onion, Vegetables">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+            Save Mess Expense
+          </button>
+        </form>
+      </div>
+
+      <!-- Record Member Deposit Form -->
+      <div class="card form-card">
+        <h3 class="card-title">Record Member Deposit</h3>
+        <p class="card-subtitle">Credits money into a member's individual balance.</p>
+
+        <form id="form-deposit" class="app-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label class="form-label" for="deposit-member">Select Member</label>
+            <select id="deposit-member" class="form-select">
+              <option value="user1">Tanvir Fahim</option>
+              <option value="user2">Sabbir Ahmed</option>
+              <option value="user3">Rakibul Hasan</option>
+              <option value="user4">Mahmudul Hasan</option>
+            </select>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="deposit-amount">Amount (৳)</label>
+              <input type="number" id="deposit-amount" class="form-input" placeholder="e.g. 3000" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="deposit-date">Date</label>
+              <input type="date" id="deposit-date" class="form-input" value="2026-10-14">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-secondary btn-block">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Record Deposit
+          </button>
+        </form>
+      </div>
+
+      <!-- Mess Invite Code Card -->
+      <div class="card invite-code-card" id="card-mess-invite">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <h3 class="card-title" style="color:#FFFFFF;">Mess Roommate Invite Code</h3>
+          <span class="badge badge-owner" id="badge-current-mess-role">Owner</span>
+        </div>
+        <p style="font-size:12px; color:#C7D2FE; margin-top:4px;">
+          Share this invite code with roommates so they can request to join <strong id="invite-mess-name">My Mess</strong>:
+        </p>
+        <div class="invite-code-flex">
+          <div class="invite-code-display" id="display-invite-code">SMPAZ8</div>
+          <button type="button" class="btn btn-secondary" id="btn-copy-invite-code" style="padding:10px 16px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Copy Code
+          </button>
+        </div>
+      </div>
+
+      <!-- Pending Join Requests (Owner / Admin Only) -->
+      <div class="card" id="card-join-requests">
+        <div class="card-header-flex">
+          <div>
+            <h3 class="card-title">Pending Member Join Requests</h3>
+            <p class="card-subtitle">Approve or reject roommates requesting to join your mess</p>
+          </div>
+          <span class="badge badge-warning" id="badge-pending-count">0 Pending</span>
+        </div>
+        <div class="request-list" id="join-requests-list">
+          <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:12.5px;">
+            No pending join requests at this time.
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Role Management (Owner / Admin Only) -->
+      <div class="card" id="card-member-roles">
+        <div class="card-header-flex">
+          <div>
+            <h3 class="card-title">Mess Members & Role Assignment</h3>
+            <p class="card-subtitle">Owner can assign Admin and Manager roles. Admins can assign Manager roles.</p>
+          </div>
+          <span class="badge badge-primary" id="badge-total-members">0 Members</span>
+        </div>
+        <div class="member-manage-list" id="mess-members-admin-list">
+          <div style="text-align:center; padding:12px; color:var(--text-muted); font-size:12.5px;">
+            Loading mess members...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: CREATE OR JOIN MESS MODAL -->
+    <section id="section-mess-modal" class="app-section auth-modal-screen">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="auth-icon-badge">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h2 class="auth-title" id="mess-modal-title">Mess Management</h2>
+          <p class="auth-subtitle">Create a new mess or join your roommates using their invite code.</p>
+        </div>
+
+        <!-- Pending Join Status Alert (if user has pending request) -->
+        <div id="mess-pending-alert" class="alert-banner warning-banner" style="display:none; margin-bottom:14px;">
+          <div class="alert-content">
+            <h4 class="alert-title">⏳ Join Request Pending Approval</h4>
+            <p class="alert-desc" id="mess-pending-text">
+              Your request to join the mess is waiting for approval by the Owner or Admin.
+            </p>
+          </div>
+        </div>
+
+        <!-- Firestore Cloud Sync Alert Banner -->
+        <div id="firestore-sync-alert" class="alert-banner warning-banner" style="display:none; margin-bottom:14px; flex-direction:column; align-items:flex-start; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <strong id="firestore-sync-title">Cloud Firestore Notice</strong>
+          </div>
+          <p id="firestore-sync-desc" style="font-size:12px; color:var(--text-secondary); margin:0;">
+            Mess saved locally. To sync across devices via Cloud Firestore, ensure rules are published in Firebase Console.
+          </p>
+          <div style="display:flex; gap:8px; width:100%; margin-top:4px;">
+            <button type="button" class="btn btn-secondary" id="btn-copy-rules-quick" style="padding:7px 12px; font-size:11.5px; flex:1;">
+              📋 Copy Security Rules
+            </button>
+            <a href="https://console.firebase.google.com/project/smart-mess-management-app/firestore/rules" target="_blank" class="btn btn-primary" style="padding:7px 12px; font-size:11.5px; flex:1; text-align:center; text-decoration:none;">
+              Open Firebase Rules
+            </a>
+          </div>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tab-btn-create-mess">Create a Mess</button>
+          <button class="auth-tab-btn" id="tab-btn-join-mess">Join a Mess</button>
+        </div>
+
+        <!-- Create Mess Tab -->
+        <div class="auth-tab-pane active" id="pane-create-mess">
+          <form id="form-create-mess" class="app-form" onsubmit="event.preventDefault();">
+            <div class="form-group">
+              <label class="form-label" for="create-mess-name">Mess Name</label>
+              <input type="text" id="create-mess-name" class="form-input" placeholder="e.g. Green View Bachelor Mess" required>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label" for="create-mess-fixed">Fixed Cost Share (৳)</label>
+                <input type="number" id="create-mess-fixed" class="form-input" value="800" placeholder="e.g. 800">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="create-mess-area">Location / Area</label>
+                <input type="text" id="create-mess-area" class="form-input" placeholder="e.g. Dhanmondi, Dhaka">
+              </div>
+            </div>
+            <p style="font-size:11.5px; color:var(--text-muted); margin-bottom:12px;">
+              ⭐ As creator, you will automatically become the <strong>Mess Owner</strong> with authority to assign Admin and Manager roles.
+            </p>
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-create-mess">
+              Create Mess & Become Owner
+            </button>
+          </form>
+        </div>
+
+        <!-- Join Mess Tab -->
+        <div class="auth-tab-pane" id="pane-join-mess">
+          <form id="form-join-mess" class="app-form" onsubmit="event.preventDefault();">
+            <div class="form-group">
+              <label class="form-label" for="join-mess-code">Enter 6-Digit Mess Invite Code</label>
+              <input type="text" id="join-mess-code" class="form-input" placeholder="e.g. SMPAZ8" maxlength="8" style="text-transform:uppercase; font-family:monospace; font-size:16px; font-weight:700; letter-spacing:0.1em;" required>
+            </div>
+            <p style="font-size:11.5px; color:var(--text-muted); margin-bottom:12px;">
+              Ask your Mess Owner or Admin for their 6-character Invite Code. Once requested, they will approve you as a Member.
+            </p>
+            <button type="submit" class="btn btn-secondary btn-block" id="btn-submit-join-mess">
+              Send Request to Join Mess
+            </button>
+          </form>
+        </div>
+
+        <div class="auth-footer-note" style="margin-top:14px;">
+          <button type="button" class="btn-link" id="btn-close-mess-modal">Close</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: AUTH VIEW (Phase 2 Firebase Authentication) -->
+    <section id="section-auth" class="app-section auth-modal-screen">
+      <div class="auth-card">
+        <button type="button" class="btn-icon" id="btn-close-auth-x" title="Close" aria-label="Close" style="position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%; border:1px solid var(--surface-border); background:var(--surface-bg); font-size:18px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-secondary);">&times;</button>
+        <div class="auth-header">
+          <div class="auth-icon-badge">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <h2 class="auth-title">Welcome to Hisabi</h2>
+          <p class="auth-subtitle">Sign in to manage your mess meals, balances, and bazar duties.</p>
+        </div>
+
+        <!-- Fast Demo Login Shortcut (Bypasses browser storage partitioning) -->
+        <div class="auth-demo-shortcut" style="background:#EEF2FF; border:1px solid #C7D2FE; border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:14px; text-align:center;">
+          <div style="font-size:12px; font-weight:700; color:#3730A3; margin-bottom:6px;">
+            ⚡ Quick Access for Development & Testing:
+          </div>
+          <button type="button" class="btn btn-primary btn-block" id="btn-instant-demo-login" style="font-size:12.5px; padding:9px 12px; background:#4F46E5;">
+            👑 Continue as Mess Owner (Tanvir Fahim &bull; SMPAZ8)
+          </button>
+          <div style="font-size:11px; color:#6B7280; margin-top:4px;">
+            Full instant access without Google popup storage partitioning errors
+          </div>
+        </div>
+
+        <!-- Firebase API Key Setup Box (Shown only if key needs update) -->
+        <div id="api-key-banner" class="api-key-banner" style="display:none;">
+          <div class="api-key-banner-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <strong>Firebase Web API Key Required</strong>
+          </div>
+          <p class="api-key-banner-desc">
+            To connect to <strong>smart-mess-management-app</strong>, paste your <em>Web API Key</em> from <a href="https://console.firebase.google.com/project/smart-mess-management-app/settings/general" target="_blank" style="color:var(--primary); text-decoration:underline;">Firebase Console &rarr; Project Settings</a>:
+          </p>
+          <div style="display:flex; gap:8px; margin: 8px 0;">
+            <input type="text" id="input-api-key-inline" class="form-input" placeholder="AIzaSy..." style="font-size:12px; padding:8px 10px;">
+            <button type="button" class="btn btn-primary" id="btn-save-api-key-inline" style="padding:8px 14px; font-size:12px; white-space:nowrap;">Save & Connect</button>
+          </div>
+          <div style="text-align:center; margin-top:4px;">
+            <button type="button" class="btn-link" id="btn-quick-demo" style="font-size:12px; font-weight:700;">&bull; Or Explore Dashboard in Demo Mode &bull;</button>
+          </div>
+        </div>
+
+        <!-- Auth Status / Alert Banner -->
+        <div id="auth-status-box" class="auth-status-box" style="display:none;"></div>
+
+        <!-- Auth Tabs: Email-Password / Google / Phone OTP -->
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tab-btn-email">Email / Password</button>
+          <button class="auth-tab-btn" id="tab-btn-google">Google Sign-in</button>
+          <button class="auth-tab-btn" id="tab-btn-phone">Phone OTP</button>
+        </div>
+
+        <!-- Email/Password Tab Content -->
+        <div class="auth-tab-pane active" id="pane-email">
+          <form id="form-auth-email" class="app-form" onsubmit="event.preventDefault();">
+            <div class="form-group" id="group-signup-name" style="display:none;">
+              <label class="form-label" for="auth-name">Your Full Name</label>
+              <input type="text" id="auth-name" class="form-input" placeholder="e.g. Tanvir Fahim">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="login-email">Email Address</label>
+              <input type="email" id="login-email" class="form-input" placeholder="user@example.com" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="login-password">Password</label>
+              <input type="password" id="login-password" class="form-input" placeholder="••••••••" required minlength="6">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-email-submit">Sign In with Email</button>
+            
+            <div class="auth-sub-toggle">
+              <span id="text-auth-mode">Don't have an account?</span>
+              <button type="button" class="btn-link" id="btn-toggle-auth-mode">Sign Up</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Google Tab Content -->
+        <div class="auth-tab-pane" id="pane-google">
+          <p class="auth-helper-text">Sign in securely using your authorized Google Account.</p>
+          <button class="btn btn-google btn-block" id="btn-google-signin">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            Continue with Google
+          </button>
+          <div id="google-storage-help" style="margin-top:12px; background:#FEF3C7; border:1px solid #FCD34D; border-radius:var(--radius-sm); padding:10px; font-size:11.5px; color:#92400E; line-height:1.4;">
+            💡 <strong>Notice for Storage-Partitioned Browsers:</strong><br>
+            If your browser partitions or blocks popup sessionStorage, Google sign-in may show <em>missing initial state</em>. You can use the <strong>Email / Password</strong> tab, or click <strong>Continue as Mess Owner</strong> above for instant 1-click access!
+          </div>
+        </div>
+
+        <!-- Phone OTP Tab Content -->
+        <div class="auth-tab-pane" id="pane-phone">
+          <form id="form-login-phone" class="app-form" onsubmit="event.preventDefault();">
+            <div id="phone-input-step">
+              <div class="form-group">
+                <label class="form-label" for="login-phone">Mobile Phone (with country code)</label>
+                <input type="tel" id="login-phone" class="form-input" placeholder="+8801700000000" value="+880">
+              </div>
+              <div id="recaptcha-container" style="margin-bottom: 12px;"></div>
+              <button type="button" class="btn btn-secondary btn-block" id="btn-send-otp">Send Verification Code</button>
+            </div>
+
+            <!-- Verification Code Input Step (Initially Hidden) -->
+            <div id="otp-input-step" style="display:none;">
+              <div class="form-group">
+                <label class="form-label" for="otp-code">Enter 6-digit SMS OTP</label>
+                <input type="text" id="otp-code" class="form-input" placeholder="123456" maxlength="6">
+              </div>
+              <button type="button" class="btn btn-primary btn-block" id="btn-verify-otp">Verify OTP & Sign In</button>
+              <button type="button" class="btn-link" id="btn-resend-phone" style="display:block; margin: 8px auto 0;">Change Phone Number</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="auth-footer-note">
+          <button class="btn-link" id="btn-close-auth-preview">Preview Dashboard &rarr;</button>
+          &bull;
+          <button class="btn-link" id="btn-config-key">Firebase API Key Settings</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Fixed Bottom Navigation Bar (Mobile-First SPA) -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-target="section-dashboard">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </div>
+      <span class="nav-label">Dashboard</span>
+    </button>
+
+    <button class="nav-item" data-target="section-mess-dashboard" id="nav-item-mess-hub">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <span class="nav-label">Mess Hub</span>
+    </button>
+
+    <button class="nav-item" data-target="section-meals">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+          <line x1="6" y1="1" x2="6" y2="4"></line>
+          <line x1="10" y1="1" x2="10" y2="4"></line>
+          <line x1="14" y1="1" x2="14" y2="4"></line>
+        </svg>
+      </div>
+      <span class="nav-label">Meals</span>
+    </button>
+
+    <button class="nav-item" data-target="section-bazar">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+      </div>
+      <span class="nav-label">Bazar</span>
+    </button>
+
+    <button class="nav-item" data-target="section-manager">
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+      <span class="nav-label">Manager</span>
+    </button>
+  </nav>
+
+  <!-- Load Main JavaScript Application as ES Module -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
